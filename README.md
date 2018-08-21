@@ -13,7 +13,7 @@ To install module update your compose.json with the following lines
     "repositories": [
         {
             "type": "vcs",
-            "url":  ""
+            "url":  "git@github.com:Antonyan/ddd-project-generator.git"
         }
     ]
 }
