@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  # if $SOURCE was a relative symlink, we need to resolve
+  # it relative to the path where the symlink file was located
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+# go up outside the bin directory
+DIR=$( dirname $DIR )
+
+if [ "$#" -lt 1 ]; then
+  echo "Usage:"
+  echo "$0 <command>"
+  echo
+  echo "Available commands:"
+  ls -1 ${DIR}/src/generate-*php | sed -n 's/.*\/src\/generate-\(.*\)\.php/\1/p'
+  exit 1
+fi
+
+COMMAND=$1
+shift
+COMMAND_FILE="${DIR}/src/generate-${COMMAND}.php"
+if [ -f "${COMMAND_FILE}" ]; then
+  php "${COMMAND_FILE}" $@
+else
+  echo "Unknown command '${COMMAND}'"
+  exit 1
+fi

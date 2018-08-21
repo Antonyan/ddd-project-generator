@@ -1,0 +1,25 @@
+{
+    "name": "ddd-project/generator",
+    "description": "A generator of Context and Module",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Artem Antonenko",
+            "email": "antonenko.artem@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+      "php": ">=7.1.0"
+    },
+    "bin": ["bin/generate"],
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {
+    }
+  }
+
+}
