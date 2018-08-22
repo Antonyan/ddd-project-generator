@@ -14,9 +14,6 @@
       "php": ">=7.1.0"
     },
     "bin": ["bin/generate"],
-    "config": {
-        "bin-dir": "bin"
-    },
     "autoload": {
         "psr-4": {
     }
