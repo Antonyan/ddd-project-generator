@@ -1,5 +1,5 @@
 {
-    "name": "ddd-project/generator",
+    "name": "antonyan/ddd-project-generator",
     "description": "A generator of Context and Module",
     "type": "library",
     "license": "MIT",
@@ -9,7 +9,7 @@
             "email": "antonenko.artem@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
       "php": ">=7.1.0"
     },
