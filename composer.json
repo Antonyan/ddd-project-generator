@@ -16,7 +16,7 @@
     "bin": ["bin/generate"],
     "autoload": {
         "psr-4": {
+        }
     }
-  }
 
 }

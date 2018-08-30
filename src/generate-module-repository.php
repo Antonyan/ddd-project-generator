@@ -26,7 +26,6 @@ $entityNamespace = $options['n'];
 $entity = new ReflectionClass($entityNamespace);
 
 $properties = [];
-$entityName = array_pop(explode('\\' , $entity->getName()));
 
 foreach ($entity->getProperties() as $reflection) {
     $properties[] = $reflection->name;
@@ -38,6 +37,7 @@ $pathArray = explode(DIRECTORY_SEPARATOR, $path);
 array_pop($pathArray);
 $contextName = end($pathArray);
 
+$entityName = array_pop(explode('\\' , $entity->getName()));
 $moduleName = $entityName . 'Module';
 $modulePath = implode(DIRECTORY_SEPARATOR, $pathArray)
     . DIRECTORY_SEPARATOR . $entityName . 'Module' . DIRECTORY_SEPARATOR;
@@ -46,47 +46,18 @@ createFolder($modulePath);
 createFolder($modulePath . 'config');
 createFolder($modulePath . 'Services');
 createFolder($modulePath . 'Models');
-createFolder($modulePath . 'Mappers');
+createFolder($modulePath . 'Repositories');
 createFolder($modulePath . 'Factories');
 
-addConfigFileWithEntityMapping($modulePath, $entityName, $properties);
+addConfigFile($modulePath);
 addContainerFile($modulePath, $contextName, $moduleName, $entityName);
 addFactoryFile($modulePath, $contextName, $moduleName, $entityName, $properties);
 
 moveEntityToModuleModels($path, $entity, $contextName, $moduleName, $modulePath, $entityName);
 
-addDbMapperFile($modulePath, $entityName, $contextName, $moduleName);
+addDbRepositoryFile($modulePath, $entityName, $contextName, $moduleName);
 addModuleServiceFile($modulePath, $entityName, $contextName, $moduleName);
 
-
-
-function addConfigFileWithEntityMapping($modulePath, $entityName, $properties)
-{
-    $columnMap = [];
-    $tableName = tableName($entityName);
-    
-    foreach ($properties as $property) {
-        $columnMap[] = "\t\t\t" . '\'' . $property . '\' => \'' . $tableName . '.' . $property . '\',';
-    }
-
-    file_put_contents(
-        $modulePath . '/config/config.php',
-        renderTemplate([
-            'EntityName' => $entityName,
-            'tableName' => '\'' . $tableName . '\'',
-            'columnsMapping' => implode("\n", $columnMap),
-        ], TEMPLATES_PATH . '/configs/moduleConfig.tpl')
-    );
-}
-
-/**
- * @param $entityName
- * @return string
- */
-function tableName($entityName): string
-{
-    return lcfirst($entityName) . 's';
-}
 
 /**
  * @param $modulePath
@@ -102,7 +73,8 @@ function addModuleServiceFile($modulePath, $entityName, $contextName, $moduleNam
             'ContextName' => $contextName,
             'ModuleName' => $moduleName,
             'EntityName' => $entityName,
-        ], TEMPLATES_PATH . '/ModuleWithMappersService.tpl')
+            'entityName' => lcfirst($entityName),
+        ], TEMPLATES_PATH . '/ModuleService.tpl')
     );
 }
 
@@ -117,7 +89,7 @@ function addContainerFile($mainFolder, $contextName, $moduleName, $entityName): 
             'ContextName' => $contextName,
             'ModuleName' => $moduleName,
             'EntityName' => $entityName,
-        ], TEMPLATES_PATH . '/moduleWithMapperContainer.tpl')
+        ], TEMPLATES_PATH . '/moduleContainer.tpl')
     );
 }
 
@@ -132,8 +104,8 @@ function addFactoryFile($mainFolder, $contextName, $moduleName, $entityName, $pr
             'ContextName' => $contextName,
             'ModuleName' => $moduleName,
             'EntityName' => $entityName,
-            'params' => createParams($properties),
-        ], TEMPLATES_PATH . '/FactoryMappers.tpl')
+            'Setters' => createObjectSetters($properties),
+        ], TEMPLATES_PATH . '/Factory.tpl')
     );
 }
 
@@ -159,25 +131,6 @@ function createObjectSetters($properties): string
 }
 
 /**
- * @param $properties
- * @return string
- */
-function createParams($properties) 
-{
-    $params = '';
-
-    foreach ($properties as $property) {
-        if ($property == 'id'){
-            continue;
-        }
-        
-        $params .= "\t\t\t" . '$data[\'' . $property . '\'],' . "\n";
-    }
-    
-    return rtrim($params, ',' . "\n");
-}
-
-/**
  * @param $path
  * @param $entity
  * @param $contextName
@@ -200,14 +153,15 @@ function moveEntityToModuleModels($path, $entity, $contextName, $moduleName, $mo
  * @param $contextName
  * @param $moduleName
  */
-function addDbMapperFile($modulePath, $entityName, $contextName, $moduleName): void
+function addDbRepositoryFile($modulePath, $entityName, $contextName, $moduleName): void
 {
     file_put_contents(
-        $modulePath . '/Mappers/' . ucfirst($entityName) . 'DbMapper.php',
+        $modulePath . '/Repositories/' . ucfirst($entityName) . 'DbRepository.php',
         renderTemplate([
             'ContextName' => $contextName,
             'ModuleName' => $moduleName,
             'EntityName' => $entityName,
-        ], TEMPLATES_PATH . '/DbMapper.tpl')
+            'entityName' => lcfirst($entityName),
+        ], TEMPLATES_PATH . '/DbRepository.tpl')
     );
 }

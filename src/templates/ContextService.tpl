@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\{$ContextName};
+namespace Contexts\{$ContextName}\Services;
 
 use Contexts\{$ContextName}\{$ContextName}Contract;
 use Infrastructure\Services\BaseService;
