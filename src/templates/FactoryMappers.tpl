@@ -3,6 +3,7 @@
 namespace Contexts\{$ContextName}\{$ModuleName}\Factories;
 
 use Contexts\{$ContextName}\{$ModuleName}\Models\{$EntityName};
+use Infrastructure\Models\ArraySerializable;
 use Infrastructure\Services\BaseFactory;
 
 class {$EntityName}Factory extends BaseFactory

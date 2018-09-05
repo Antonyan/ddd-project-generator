@@ -4,7 +4,6 @@ namespace Contexts\{$ContextName}\{$ModuleName}\Services;
 
 use Contexts\{$ContextName}\{$ModuleName}\Mappers\{$EntityName}DbMapper;
 use Contexts\{$ContextName}\{$ModuleName}\Models\{$EntityName};
-use Exception;
 use Infrastructure\Exceptions\InfrastructureException;
 use Infrastructure\Models\PaginationCollection;
 use Infrastructure\Models\SearchCriteria\SearchCriteria;
