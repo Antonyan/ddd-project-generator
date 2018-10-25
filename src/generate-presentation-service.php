@@ -59,9 +59,3 @@ function addPresentationService(string $path, string $serviceName, string $contr
         renderTemplate(['ServiceName' => $serviceName, 'ContactName' => $contractName], TEMPLATES_PATH . '/PresentationService.tpl')
     );
 }
-
-
-
-
-
-
