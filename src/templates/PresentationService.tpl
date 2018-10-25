@@ -12,6 +12,8 @@ use Infrastructure\Services\BaseService;
 use Symfony\Component\HttpFoundation\Request;
 use Infrastructure\Models\SearchCriteria\SearchCriteriaQueryString;
 
+use {$FullContactName};
+
 /**
  * Class {$ServiceName}
  * @package App\Services
@@ -19,6 +21,7 @@ use Infrastructure\Models\SearchCriteria\SearchCriteriaQueryString;
 class {$ServiceName} extends BaseService implements CRUDServiceInterface
 {
     /**
+     * @Validation(name="offset", type="string")
      * @Validation(name="offset", type="string")
      * @Validation(name="orderByAsc", type="string")
      * @Validation(name="orderByDesc", type="string")
@@ -31,7 +34,7 @@ class {$ServiceName} extends BaseService implements CRUDServiceInterface
     public function load(Request $request) : GetEntityJsonResponse
     {
         return new GetEntityJsonResponse(
-            $this->get{$ContactName}()->load(new SearchCriteriaQueryString($request->query->all()))->toArray()
+            $this->get{$ContractName}()->load(new SearchCriteriaQueryString($request->query->all()))->toArray()
         );
     }
 
@@ -42,7 +45,7 @@ class {$ServiceName} extends BaseService implements CRUDServiceInterface
      */
     public function create(Request $request) : CreateEntityJsonResponse
     {
-        return new CreateEntityJsonResponse($this->get{$ContactName}()->create($request->request->all())->toArray());
+        return new CreateEntityJsonResponse($this->get{$ContractName}()->create($request->request->all())->toArray());
     }
 
     /**
@@ -53,7 +56,7 @@ class {$ServiceName} extends BaseService implements CRUDServiceInterface
      */
     public function update(Request $request, $id) : UpdateEntityJsonResponse
     {
-        return new UpdateEntityJsonResponse($this->get{$ContactName}()->update($id, $request->request->all())->toArray());
+        return new UpdateEntityJsonResponse($this->get{$ContractName}()->update($id, $request->request->all())->toArray());
     }
 
     /**
@@ -63,7 +66,7 @@ class {$ServiceName} extends BaseService implements CRUDServiceInterface
      */
     public function delete($id) : DeleteEntityJsonResponse
     {
-        $this->get{$ContactName}()->delete($id);
+        $this->get{$ContractName}()->delete($id);
         return new DeleteEntityJsonResponse();
     }
 
@@ -74,14 +77,14 @@ class {$ServiceName} extends BaseService implements CRUDServiceInterface
      */
     public function get($id) : GetEntityJsonResponse
     {
-        return new GetEntityJsonResponse($this->get{$ContactName}()->get($id)->toArray());
+        return new GetEntityJsonResponse($this->get{$ContractName}()->get($id)->toArray());
     }
 
     /**
-    * @return {$ContactName}
+    * @return {$ContractName}
     */
-    public function get{$ContactName}(): {$ContactName}
+    public function get{$ContractName}(): {$ContractName}
     {
-        return $this->container()->get('{$ContactName}');
+        return $this->container()->get('{$ContractName}');
     }
 }

@@ -12,7 +12,7 @@ $options = getopt($shortopts);
 
 if (!$options) {
     echo Color::colorize(
-        PHP_EOL . 'Syntax: generate-presentation-service.php -n name service -c name contract' . PHP_EOL,
+        PHP_EOL . 'Syntax: generate-presentation-service.php -n name service -c full name contract' . PHP_EOL,
         Color::FG_RED
     );
     exit;
@@ -36,6 +36,8 @@ if (!array_key_exists('c', $options)) {
 
 $namePresentationService = $options['n'];
 $contactName = $options['c'];
+$partsOfContractName = explode('\\', $contactName);
+$shortContractName = end($partsOfContractName);
 $mainFolder = __DIR__ . '/generated/app/';
 
 if (!is_dir($mainFolder)) {
@@ -50,12 +52,16 @@ if (!is_dir($mainFolder . 'Services')) {
     createFolder($mainFolder . 'Services');
 }
 
-addPresentationService($mainFolder . 'Services',  $namePresentationService, $contactName);
+addPresentationService($mainFolder . 'Services',  $namePresentationService, $contactName, $shortContractName);
 
-function addPresentationService(string $path, string $serviceName, string $contractName)
+function addPresentationService(string $path, string $serviceName, string $contractName, string $shortContractName)
 {
     file_put_contents(
         "$path/$serviceName.php",
-        renderTemplate(['ServiceName' => $serviceName, 'ContactName' => $contractName], TEMPLATES_PATH . '/PresentationService.tpl')
+        renderTemplate([
+            'ServiceName' => $serviceName,
+            'FullContactName' => $contractName,
+            'ContractName' => $shortContractName
+        ], TEMPLATES_PATH . '/PresentationService.tpl')
     );
 }
