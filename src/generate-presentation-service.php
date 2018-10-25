@@ -6,23 +6,36 @@ include_once('functions.php');
 
 $shortopts  = '';
 $shortopts .= 'n:';
+$shortopts .= 'c:';
 
 $options = getopt($shortopts);
 
 if (!$options) {
-    echo Color::colorize(PHP_EOL . 'Syntax: generate-presentation-service.php -n name service', Color::BG_LIGHT_GRAY);
+    echo Color::colorize(
+        PHP_EOL . 'Syntax: generate-presentation-service.php -n name service -c name contract' . PHP_EOL,
+        Color::FG_RED
+    );
     exit;
 }
 
 if (!array_key_exists('n', $options)) {
     echo Color::colorize(
-        PHP_EOL . 'You should name of presentation service' . PHP_EOL,
+        PHP_EOL . 'You should set name of presentation service' . PHP_EOL,
+        Color::FG_RED
+    );
+    exit;
+}
+
+if (!array_key_exists('c', $options)) {
+    echo Color::colorize(
+        PHP_EOL . 'You should set contract name of presentation service' . PHP_EOL,
         Color::FG_RED
     );
     exit;
 }
 
 $namePresentationService = $options['n'];
+$contactName = $options['c'];
 $mainFolder = __DIR__ . '/generated/app/';
 
 if (!is_dir($mainFolder)) {
@@ -37,13 +50,13 @@ if (!is_dir($mainFolder . 'Services')) {
     createFolder($mainFolder . 'Services');
 }
 
-addPresentationService($mainFolder . 'Services',  $namePresentationService);
+addPresentationService($mainFolder . 'Services',  $namePresentationService, $contactName);
 
-function addPresentationService(string $path, string $name)
+function addPresentationService(string $path, string $serviceName, string $contractName)
 {
     file_put_contents(
-        "$path/$name.php",
-        renderTemplate(['ServiceName' => $name], TEMPLATES_PATH . '/PresentationService.tpl')
+        "$path/$serviceName.php",
+        renderTemplate(['ServiceName' => $serviceName, 'ContactName' => $contractName], TEMPLATES_PATH . '/PresentationService.tpl')
     );
 }
 

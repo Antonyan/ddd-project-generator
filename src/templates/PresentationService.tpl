@@ -10,12 +10,13 @@ use Infrastructure\Models\GetEntityJsonResponse;
 use Infrastructure\Models\UpdateEntityJsonResponse;
 use Infrastructure\Services\BaseService;
 use Symfony\Component\HttpFoundation\Request;
+use Infrastructure\Models\SearchCriteria\SearchCriteriaQueryString;
 
 /**
  * Class {$ServiceName}
  * @package App\Services
  */
-class {$ServiceName} extends BaseService
+class {$ServiceName} extends BaseService implements CRUDServiceInterface
 {
     /**
      * @Validation(name="offset", type="string")
@@ -25,51 +26,62 @@ class {$ServiceName} extends BaseService
      * @Validation(name="gt", type="string")
      * @param Request $request
      * @return GetEntityJsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function load(Request $request) : GetEntityJsonResponse
     {
-        throw new \BadMethodCallException('Not implemented');
+        return new GetEntityJsonResponse(
+            $this->get{$ContactName}()->load(new SearchCriteriaQueryString($request->query->all()))->toArray()
+        );
     }
 
     /**
      * @param Request $request
      * @return CreateEntityJsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(Request $request) : CreateEntityJsonResponse
     {
-        throw new \BadMethodCallException('Not implemented');
+        return new CreateEntityJsonResponse($this->get{$ContactName}()->create($request->request->all())->toArray());
     }
 
     /**
      * @param Request $request
      * @param $id
      * @return UpdateEntityJsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function update(Request $request, $id) : UpdateEntityJsonResponse
     {
-        throw new \BadMethodCallException('Not implemented');
+        return new UpdateEntityJsonResponse($this->get{$ContactName}()->update($id, $request->request->all())->toArray());
     }
 
     /**
      * @param $id
      * @return DeleteEntityJsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function delete($id) : DeleteEntityJsonResponse
     {
-        throw new \BadMethodCallException('Not implemented');
+        $this->get{$ContactName}()->delete($id);
+        return new DeleteEntityJsonResponse();
     }
 
      /**
      * @param $id
      * @return GetEntityJsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function get($id) : GetEntityJsonResponse
     {
-        throw new \BadMethodCallException('Not implemented');
+        return new GetEntityJsonResponse($this->get{$ContactName}()->get($id)->toArray());
+    }
+
+    /**
+    * @return {$ContactName}
+    */
+    public function get{$ContactName}(): {$ContactName}
+    {
+        return $this->container()->get('{$ContactName}');
     }
 }
