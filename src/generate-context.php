@@ -21,7 +21,7 @@ if(!array_key_exists('n', $options)){
 
 $contextName = $options['n'];
 
-$mainFolder = __DIR__ . '/generated/' . $contextName . DIRECTORY_SEPARATOR;
+$mainFolder = __DIR__ . '/../../../../src/contexts/' . $contextName . DIRECTORY_SEPARATOR;
 
 createFolder($mainFolder);
 createFolder($mainFolder . 'config');
