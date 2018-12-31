@@ -66,7 +66,7 @@ if (!file_exists($presentationServicesPath)){
     createFolder( $presentationServicesPath);
 }
 
-//addPresentationService($presentationServicesPath, $entity, $contract);
+addPresentationService($presentationServicesPath, $entity, $contract);
 
 $container = file_get_contents($presentationServicesContainerPath);
 
