@@ -103,7 +103,7 @@ use OpenApi\Annotations\Get;
  *          name="id", @Schema(type="string"), description="Id's {$resource}"
  *      ),
  *     @Response(
- *          response="200",
+ *          response="204",
  *          description="Delete {$resource} by id",
  *      )
  * )
